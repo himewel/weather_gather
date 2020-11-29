@@ -1,0 +1,5 @@
+**/*.zip
+**/*.CSV
+**/*.csv
+**/*.parquet
+**/*.json
