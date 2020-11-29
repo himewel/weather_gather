@@ -47,6 +47,7 @@ services:
                 airflow webserver"
 
     metabase:
+        container_name: metabase
         image: metabase/metabase:v0.37.2
         ports:
             - 3000:3000
