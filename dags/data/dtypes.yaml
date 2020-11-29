@@ -1,0 +1,31 @@
+float:
+    - precipitacao_total
+    - pressao_atmosferica
+    - pressao_atmosferica_max
+    - pressao_atmosferica_min
+    - radiacao
+    - temperatura
+    - orvalho
+    - temperatura_max
+    - temperatura_min
+    - orvalho_max
+    - orvalho_min
+    - umidade_max
+    - umidade_min
+    - umidade
+    - vento_direcao
+    - vento_velocidade_max
+    - vento_velocidade
+    - latitude
+    - longitude
+    - altitude
+
+string:
+    - regiao
+    - uf
+    - estacao
+    - codigo
+
+datetime:
+    - data_medicao
+    - data_fundacao
