@@ -31,10 +31,17 @@ At this point, we suppose that you have created your GCP project with a dataset 
 docker exec airflow airflow unpause weather_data_pipeline
 ```
 
-To follow the dag run, check the Airflow webserver GUI in http://localhost:8000. To build the charts below, enter in the Metabse GUI, gice the service account access and create the questions with sql files in `sql`.
+To follow the dag run, check the Airflow webserver GUI in http://localhost:8000. To build the charts below, enter in the Metabse GUI at http://localhost:3000, give the service account access and create the questions with sql files in `sql`.
 
 ![](img/map_chart.png)
 
 ![](img/line_chart.png)
 
 ![](img/dashboard.png)
+
+## References
+
+- https://github.com/robainaricardo/weather-stations-automated-data-gather
+- https://portal.inmet.gov.br/dadoshistoricos
+- https://airflow.apache.org/docs/stable/howto/index.html
+- https://www.metabase.com/docs/latest/setting-up-metabase.html
