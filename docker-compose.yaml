@@ -1,53 +1,35 @@
 version: '3.7'
 services:
     postgres:
-        container_name: postgres
         image: postgres:12-alpine
         environment:
             POSTGRES_USER: airflow
             POSTGRES_PASSWORD: airflow
             POSTGRES_DB: airflow
-        ports:
-            - 5432:5432
 
     webserver:
-        container_name: airflow
         build:
             context: .
             dockerfile: Dockerfile
         depends_on:
             - postgres
         environment:
-            - PYTHONPATH=/home/airflow/dags
-            # airflow connection with postgre container
+            - PYTHONPATH=/opt/airflow/dags
             - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
             - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-            # disable example loading
             - AIRFLOW__CORE__LOAD_EXAMPLES=FALSE
-            # pick up new DAGs every 10s, also reduces CPU usage since default on min_file_process_interval is 0
             - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=10
             - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=10
-            # make navbar purple
-            - AIRFLOW__WEBSERVER__NAVBAR_COLOR=#00008B
-            # kill workers every 5min instead of the default 2min
             - AIRFLOW__WEBSERVER__WEB_SERVER_WORKER_TIMEOUT=300
-            # restart workers every 15min instead of the default 30s
             - AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL=900
             - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=TRUE
         volumes:
-            - ./dags:/home/airflow/dags
-            - ./credentials:/home/airflow/credentials
+            - ./dags:/opt/airflow/dags
+            - ./credentials:/opt/airflow/credentials
         ports:
             - 8080:8080
-        command: >
-            bash -c "
-                airflow upgradedb;
-                rm /home/airflow/airflow-scheduler.*;
-                airflow scheduler -D;
-                airflow webserver"
 
     metabase:
-        container_name: metabase
         image: metabase/metabase:v0.37.2
         ports:
             - 3000:3000
