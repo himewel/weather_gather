@@ -18,6 +18,15 @@ up:
 	GROUP_ID=${GROUP_ID} \
 		docker-compose up --detach
 
+.PHONY: start
+start:
+	AIRFLOW_HOME=${AIRFLOW_HOME} \
+	USER_ID=${USER_ID} \
+	GROUP_ID=${GROUP_ID} \
+		docker-compose exec \
+			airflow \
+			airflow unpause weather_data_pipeline
+
 .PHONY: stop
 stop:
 	docker-compose stop

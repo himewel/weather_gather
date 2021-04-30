@@ -7,7 +7,7 @@ services:
             POSTGRES_PASSWORD: airflow
             POSTGRES_DB: airflow
 
-    webserver:
+    airflow:
         build:
             context: .
             dockerfile: Dockerfile
