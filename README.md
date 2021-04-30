@@ -1,17 +1,9 @@
 # INMET Weather Stations Data Gather
 
-<code>
-    <img height="20" src="https://cdn.iconscout.com/icon/free/png-512/docker-226091.png"> Docker
-</code> +
-<code>
-    <img height="20" src="https://avatars2.githubusercontent.com/u/33643075?s=280&v=4"> Airflow
-</code> +
-<code>
-    <img height="20" src="https://www.clipartmax.com/png/middle/200-2001825_bigquery-analytics-data-warehouse-google-cloud-big-query-icon.png"> BigQuery
-</code> +
-<code>
-    <img height="20" src="https://iconape.com/wp-content/files/yn/80805/svg/metabase.svg"> Metabase
-</code>
+<code><img height="20" src="https://cdn.iconscout.com/icon/free/png-512/docker-226091.png"> Docker</code> +
+<code><img height="20" src="https://avatars2.githubusercontent.com/u/33643075?s=280&v=4"> Airflow</code> +
+<code><img height="20" src="https://www.clipartmax.com/png/middle/200-2001825_bigquery-analytics-data-warehouse-google-cloud-big-query-icon.png"> BigQuery</code> +
+<code><img height="20" src="https://iconape.com/wp-content/files/yn/80805/svg/metabase.svg"> Metabase</code>
 
 Hi, there! Here we are going to extract data from Brazil weather stations with [INMET](https://portal.inmet.gov.br/dadoshistoricos) open data files. After extraction, we structure the data (of an awful csv format) with Apache Airflow task orchestration with PythonOperator and BashOperator, then the data is uploaded to BigQuery. So, with the structured data in GCS and BigQuery, we use Metabase to create some charts.
 
@@ -29,7 +21,7 @@ make build && make up
 
 At this point, we suppose that you have created your GCP project with a dataset named as `dw` and extracted the service account in `./dags/credentials/credentials.json`. So, start the DAG scheduling with this:
 
-```bash
+```console
 make start
 ```
 
