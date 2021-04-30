@@ -1,5 +1,8 @@
 FROM apache/airflow:2.0.1
 
+ARG USER_ID
+ARG GROUP_ID
+
 ARG AIRFLOW_HOME=/opt/airflow
 ENV AIRFLOW_HOME $AIRFLOW_HOME
 
@@ -9,16 +12,20 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./start_airflow.sh $AIRFLOW_HOME/start_airflow.sh
-RUN chown -R airflow $AIRFLOW_HOME/start_airflow.sh \
-    && chmod +x $AIRFLOW_HOME/start_airflow.sh
+COPY ./tools $AIRFLOW_HOME/tools
+
+WORKDIR $AIRFLOW_HOME
+
+RUN usermod -u ${USER_ID} airflow \
+    && groupmod -g ${GROUP_ID} airflow \
+    && chown -R airflow $AIRFLOW_HOME \
+    && chmod +x $AIRFLOW_HOME/tools/*.sh
 
 USER airflow
-WORKDIR $AIRFLOW_HOME
 
 COPY ./requirements.txt $AIRFLOW_HOME/requirements.txt
 RUN pip3 install --quiet --user --no-cache-dir --requirement requirements.txt
 
-HEALTHCHECK CMD "curl --fail http://localhost:8080/ || exit 1"
+HEALTHCHECK CMD ["/bin/bash", "$AIRFLOW_HOME/tools/healthcheck.sh"]
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["$AIRFLOW_HOME/start_airflow.sh"]
+CMD ["$AIRFLOW_HOME/tools/start_airflow.sh"]
