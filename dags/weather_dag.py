@@ -41,21 +41,18 @@ with DAG(
 
     raw_parser_task = PythonOperator(
         task_id="raw_parser",
-        provide_context=True,
         python_callable=raw_parser,
         op_kwargs={'data_path': data_path},
     )
 
     dw_transform_task = PythonOperator(
         task_id="dw_transform",
-        provide_context=True,
         python_callable=dw_transform,
         op_kwargs={'data_path': data_path},
     )
 
     bq_upload_task = PythonOperator(
         task_id="upload",
-        provide_context=True,
         python_callable=bigquery_upload,
         op_kwargs={'data_path': data_path},
     )
