@@ -1,6 +1,8 @@
 from glob import glob
-import pandas as pd
 from io import StringIO
+
+import pandas as pd
+import numpy as np
 
 
 def raw_parser(data_path="", **kwargs):
@@ -20,40 +22,43 @@ def raw_parser(data_path="", **kwargs):
 
         full_df = full_df.append(df, ignore_index=True)
 
-    full_df.rename(columns={
-        "DATA (YYYY-MM-DD)": "data_medicao",
-        "HORA (UTC)": "hora",
-        "PRECIPITAÇÃO TOTAL. HORÁRIO (mm)": "precipitacao_total",
-        "PRESSAO ATMOSFERICA AO NIVEL DA ESTACAO. HORARIA (mB)": "pressao_atmosferica",  # noqa
-        "PRESSÃO ATMOSFERICA MAX.NA HORA ANT. (AUT) (mB)": "pressao_atmosferica_max",  # noqa
-        "PRESSÃO ATMOSFERICA MIN. NA HORA ANT. (AUT) (mB)": "pressao_atmosferica_min",  # noqa
-        "RADIACAO GLOBAL (KJ/m²)": "radiacao",
-        "TEMPERATURA DO AR - BULBO SECO. HORARIA (°C)": "temperatura",
-        "TEMPERATURA DO PONTO DE ORVALHO (°C)": "orvalho",
-        "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)": "temperatura_max",
-        "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)": "temperatura_min",
-        "TEMPERATURA ORVALHO MAX. NA HORA ANT. (AUT) (°C)": "orvalho_max",
-        "TEMPERATURA ORVALHO MIN. NA HORA ANT. (AUT) (°C)": "orvalho_min",
-        "UMIDADE REL. MAX. NA HORA ANT. (AUT) (%)": "umidade_max",
-        "UMIDADE REL. MIN. NA HORA ANT. (AUT) (%)": "umidade_min",
-        "UMIDADE RELATIVA DO AR. HORARIA (%)": "umidade",
-        "VENTO. DIREÇÃO HORARIA (gr) (° (gr))": "vento_direcao",
-        "VENTO. RAJADA MAXIMA (m/s)": "vento_velocidade_max",
-        "VENTO. VELOCIDADE HORARIA (m/s)": "vento_velocidade",
-        "REGIÃO": "regiao",
-        "UF": "uf",
-        "ESTAÇÃO": "estacao",
-        "CODIGO (WMO)": "codigo",
-        "LATITUDE": "latitude",
-        "LONGITUDE": "longitude",
-        "ALTITUDE": "altitude",
-        "DATA DE FUNDAÇÃO (YYYY-MM-DD)": "data_fundacao",
-    }, inplace=True)
+    full_df.rename(
+        columns={
+            "DATA (YYYY-MM-DD)": "data_medicao",
+            "HORA (UTC)": "hora",
+            "PRECIPITAÇÃO TOTAL. HORÁRIO (mm)": "precipitacao_total",
+            "PRESSAO ATMOSFERICA AO NIVEL DA ESTACAO. HORARIA (mB)": "pressao_atmosferica",  # noqa
+            "PRESSÃO ATMOSFERICA MAX.NA HORA ANT. (AUT) (mB)": "pressao_atmosferica_max",  # noqa
+            "PRESSÃO ATMOSFERICA MIN. NA HORA ANT. (AUT) (mB)": "pressao_atmosferica_min",  # noqa
+            "RADIACAO GLOBAL (KJ/m²)": "radiacao",
+            "TEMPERATURA DO AR - BULBO SECO. HORARIA (°C)": "temperatura",
+            "TEMPERATURA DO PONTO DE ORVALHO (°C)": "orvalho",
+            "TEMPERATURA MÁXIMA NA HORA ANT. (AUT) (°C)": "temperatura_max",
+            "TEMPERATURA MÍNIMA NA HORA ANT. (AUT) (°C)": "temperatura_min",
+            "TEMPERATURA ORVALHO MAX. NA HORA ANT. (AUT) (°C)": "orvalho_max",
+            "TEMPERATURA ORVALHO MIN. NA HORA ANT. (AUT) (°C)": "orvalho_min",
+            "UMIDADE REL. MAX. NA HORA ANT. (AUT) (%)": "umidade_max",
+            "UMIDADE REL. MIN. NA HORA ANT. (AUT) (%)": "umidade_min",
+            "UMIDADE RELATIVA DO AR. HORARIA (%)": "umidade",
+            "VENTO. DIREÇÃO HORARIA (gr) (° (gr))": "vento_direcao",
+            "VENTO. RAJADA MAXIMA (m/s)": "vento_velocidade_max",
+            "VENTO. VELOCIDADE HORARIA (m/s)": "vento_velocidade",
+            "REGIÃO": "regiao",
+            "UF": "uf",
+            "ESTAÇÃO": "estacao",
+            "CODIGO (WMO)": "codigo",
+            "LATITUDE": "latitude",
+            "LONGITUDE": "longitude",
+            "ALTITUDE": "altitude",
+            "DATA DE FUNDAÇÃO (YYYY-MM-DD)": "data_fundacao",
+        },
+        inplace=True,
+    )
 
-    full_df.fillna('0', inplace=True)
+    full_df.fillna(np.nan, inplace=True)
     full_df.to_csv(
         path_or_buf=f"{data_path}/processed/{execution_date.year}.csv",
-        index=False
+        index=False,
     )
 
 
@@ -98,4 +103,5 @@ def parse_header(text_header=""):
 
 if __name__ == '__main__':
     from datetime import datetime
+
     raw_parser("dags/data", execution_date=datetime(year=2000, month=1, day=1))

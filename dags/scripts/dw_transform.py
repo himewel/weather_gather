@@ -1,6 +1,8 @@
+import os
+from datetime import datetime
+
 import pandas as pd
 import numpy as np
-from datetime import datetime
 import yaml
 
 
@@ -8,7 +10,7 @@ def dw_transform(data_path="", **kwargs):
     execution_date = kwargs.get("execution_date")
     full_df = pd.read_csv(f"{data_path}/processed/{execution_date.year}.csv")
 
-    with open(f"{data_path}/dtypes.yaml", "r") as stream:
+    with open(f"{os.getenv('DAGS_FOLDER')}/dtypes.yaml", "r") as stream:
         column_types = yaml.load(stream, Loader=yaml.SafeLoader)
 
     full_df["data"] = full_df.data_medicao + "T" + full_df.hora
@@ -19,7 +21,6 @@ def dw_transform(data_path="", **kwargs):
     full_df = transform_dim_estacoes(full_df, data_path)
 
     append_medicoes(full_df, data_path)
-    pass
 
 
 def normalize_columns(full_df, column_types):
@@ -29,24 +30,37 @@ def normalize_columns(full_df, column_types):
         full_df[column_name] = full_df[column_name].astype("str")
     for column_name in column_types["datetime"]:
         full_df[column_name] = pd.to_datetime(
-            full_df[column_name],
-            format="%Y-%m-%dT%H:%M:%S")
+            full_df[column_name], format="%Y-%m-%dT%H:%M:%S"
+        )
     return full_df
 
 
 def transform_dim_estacoes(full_df, data_path):
-    columns = ["latitude", "longitude", "altitude", "regiao", "uf", "estacao",
-               "codigo", "data_fundacao"]
+    columns = [
+        "latitude",
+        "longitude",
+        "altitude",
+        "regiao",
+        "uf",
+        "estacao",
+        "codigo",
+        "data_fundacao",
+    ]
     column_id = "estacoes_id"
 
     try:
         dim_estacoes = pd.read_parquet(f"{data_path}/dw/dim_estacoes.parquet")
     except Exception:
-        dim_estacoes = pd.DataFrame([], columns=columns+[column_id])
+        dim_estacoes = pd.DataFrame([], columns=columns + [column_id])
 
     estacoes = full_df[columns].drop_duplicates()
     estacoes.reset_index(drop=True, inplace=True)
-    index_offset = dim_estacoes[column_id].max() if not np.isnan(dim_estacoes[column_id].max()) else 0
+
+    if not np.isnan(dim_estacoes[column_id].max()):
+        index_offset = dim_estacoes[column_id].max()
+    else:
+        index_offset = 0
+
     estacoes[column_id] = estacoes.index + index_offset
 
     dim_estacoes = dim_estacoes.append(estacoes, ignore_index=True)
@@ -84,19 +98,23 @@ def append_medicoes(full_df, data_path):
     try:
         fact_medicoes = pd.read_parquet(f"{data_path}/dw/fact_medicoes.parquet")
     except Exception:
-        fact_medicoes = pd.DataFrame([], columns=columns+[column_id])
+        fact_medicoes = pd.DataFrame([], columns=columns + [column_id])
 
     full_df.reset_index(drop=True, inplace=True)
-    index_offset = fact_medicoes[column_id].max() if fact_medicoes[column_id].max() == np.nan else 0
+
+    if fact_medicoes[column_id].max() == np.nan:
+        index_offset = fact_medicoes[column_id].max()
+    else:
+        index_offset = 0
+
     full_df[column_id] = full_df.index + index_offset
 
     fact_medicoes = fact_medicoes.append(full_df, ignore_index=True)
     fact_medicoes.to_parquet(f"{data_path}/dw/fact_medicoes.parquet", index=False)
-    pass
 
 
 if __name__ == '__main__':
     dw_transform(
         data_path="dags/data",
-        execution_date=datetime(year=2000, month=1, day=1)
+        execution_date=datetime(year=2000, month=1, day=1),
     )
