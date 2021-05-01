@@ -5,7 +5,9 @@
 <code><img height="20" src="https://www.clipartmax.com/png/middle/200-2001825_bigquery-analytics-data-warehouse-google-cloud-big-query-icon.png"> BigQuery</code> +
 <code><img height="20" src="https://iconape.com/wp-content/files/yn/80805/svg/metabase.svg"> Metabase</code>
 
-Hi, there! Here we are going to extract data from Brazil weather stations with [INMET](https://portal.inmet.gov.br/dadoshistoricos) open data files. After extraction, we structure the data (of an awful csv format) with Apache Airflow task orchestration with PythonOperator and BashOperator, then the data is uploaded to BigQuery. So, with the structured data in GCS and BigQuery, we use Metabase to create some charts.
+Hi, there! Here we are going to extract data from Brazil weather stations with [INMET](https://portal.inmet.gov.br/dadoshistoricos) open data files. After extraction, we structure the data (of an awful csv format) with Apache Airflow task orchestration with PythonOperator and BashOperator, then the data is uploaded to BigQuery. So, with the structured data in GCS and BigQuery, we use Metabase to create some charts. The following diagram expands this flow.
+
+![](./img/architecture.png)
 
 How INMET gives to us the data packed in zip files organized by years (like `2000.zip` and ~), the Apache Airflow scheduler is programmed to make yearly DAG executions (just to parametrize the data extraction and manipulation, so do incremental uploads in the database). The csv headers (I said they use an awful format) are used to extract the station infos like their map coordinates (longitude, latitude and altitude). The other lines of the csv has the column titles and data (temperature, humidity, wind, dew, etc) that we still have to manipulate before read this with pandas.
 
@@ -25,7 +27,11 @@ At this point, we suppose that you have created your GCP project with a dataset 
 make start
 ```
 
-To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. To build the charts below, enter in the Metabase UI at http://localhost:3000, set the service account access and create the charts with the SQL files stored in `./sql`.
+To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. A DAG similar to the next image should be found in the UI:
+
+![](img/pipeline.png)
+
+To build the charts below, enter in the Metabase UI at http://localhost:3000, set the service account access and create the charts with the SQL files stored in `./sql`.
 
 ![](img/map_chart.png)
 
