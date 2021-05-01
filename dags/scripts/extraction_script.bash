@@ -9,4 +9,4 @@ curl -o ${data_path}/loading_zone/${reference_year}.zip \
     ${base_url}${reference_year}.zip
 
 echo "Unpacking zip files..."
-unzip -q ${data_path}/loading_zone/${reference_year}.zip -d ${data_path}/raw
+unzip -fo ${data_path}/loading_zone/${reference_year}.zip -d ${data_path}/raw
