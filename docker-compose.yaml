@@ -26,7 +26,6 @@ services:
             - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=TRUE
         volumes:
             - ./dags:$AIRFLOW_HOME/dags
-            - ./credentials:$AIRFLOW_HOME/credentials
         ports:
             - 8080:8080
 
