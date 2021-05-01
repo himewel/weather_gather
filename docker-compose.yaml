@@ -19,13 +19,10 @@ services:
             - postgres
         environment:
             - PYTHONPATH=$AIRFLOW_HOME/dags
+            - AIRFLOW__CORE__DAGS_FOLDER=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
             - AIRFLOW__CORE__EXECUTOR=LocalExecutor
             - AIRFLOW__CORE__LOAD_EXAMPLES=FALSE
-            - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=10
-            - AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL=10
-            - AIRFLOW__WEBSERVER__WEB_SERVER_WORKER_TIMEOUT=300
-            - AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL=900
             - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=TRUE
         volumes:
             - ./dags:$AIRFLOW_HOME/dags
