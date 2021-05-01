@@ -18,7 +18,7 @@ with DAG(
     dag_id="weather_data_pipeline",
     schedule_interval="@yearly",
     default_args=default_args,
-    catchup=False,
+    catchup=True,
     max_active_runs=1,
 ) as dag:
     project_path = f"{os.getenv('AIRFLOW_HOME')}/dags"
