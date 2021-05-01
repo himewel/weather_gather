@@ -6,10 +6,11 @@ import pandas as pd
 import numpy as np
 
 
-def raw_parser(data_path="", **kwargs):
+def raw_parser(data_path, **kwargs):
     execution_date = kwargs.get("execution_date")
 
     logging.info(f"Listing raw files from {execution_date.year}")
+    logging.info(f"Looking for file at {data_path}/raw/{execution_date.year}/*.CSV")
     file_list = glob(f"{data_path}/raw/{execution_date.year}/*.CSV")
     logging.info(f"Files found: \n{file_list}")
 
