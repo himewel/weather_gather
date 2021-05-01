@@ -11,7 +11,7 @@ Hi, there! Here we are going to extract data from Brazil weather stations with [
 
 How INMET gives to us the data packed in zip files organized by years (like `2000.zip` and ~), the Apache Airflow scheduler is programmed to make yearly DAG executions (just to parametrize the data extraction and manipulation, so do incremental uploads in the database). The csv headers (I said they use an awful format) are used to extract the station infos like their map coordinates (longitude, latitude and altitude). The other lines of the csv has the column titles and data (temperature, humidity, wind, dew, etc) that we still have to manipulate before read this with pandas.
 
-So, we make data transitions between buckets like `loading_zone`, `raw`, `processed` and `dw` (in local directories). When we have readable data (at `processed` bucket), we structure then in `dim_estacoes` (data about the station locations, regions and cities) and `fact_medicoes` (metering datetime and weather data) to upload them to BigQuery (someday I need to implement a dim_dates) in a dataset called by `dw` (and shazam!). The GCP service account should be named as `credentials.json` and located at `./dags/credentials/credentials.json` to do Apache Airflow read this.
+So, we make data transitions between buckets like `loading_zone`, `raw`, `processed` and `dw` (in local directories). When we have readable data (at `processed` bucket), we structure then in `dim_estacoes` (data about the station locations, regions and cities) and `fact_medicoes` (metering datetime and weather data) to upload them to BigQuery (someday I need to implement a dim_dates) in a dataset called by `dw` (and shazam!).
 
 ## How to use
 
@@ -21,10 +21,10 @@ Build up the docker container with the following command so it will get up our s
 make build && make up
 ```
 
-At this point, we suppose that you have created your GCP project with a dataset named as `dw` and extracted the service account in `./dags/credentials/credentials.json`. So, start the DAG scheduling with this:
+At this point, we suppose that you have created your GCP project with a dataset named as `dw` and your credentials are exported to `GOOGLE_APPLICATION_CREDENTIALS`. So, you can login into your GCP account and start the DAG scheduling with this:
 
 ```console
-make start
+make gcloud && make start
 ```
 
 To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. A DAG similar to the next image should be found in the UI:

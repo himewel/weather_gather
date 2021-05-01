@@ -27,6 +27,15 @@ start:
 			airflow \
 			airflow unpause weather_data_pipeline
 
+.PHONY: gcloud
+gcloud:
+	AIRFLOW_HOME=${AIRFLOW_HOME} \
+	USER_ID=${USER_ID} \
+	GROUP_ID=${GROUP_ID} \
+		docker-compose exec \
+			airflow \
+			gcloud auth login --no-launch-browser --update-adc
+
 .PHONY: stop
 stop:
 	docker-compose stop
