@@ -18,13 +18,15 @@ So, we make data transitions between buckets like `loading_zone`, `raw`, `proces
 Build up the docker container with the following command so it will get up our services, Apache Airflow (with postgres) and Metabase:
 
 ```console
-make build && make up
+make build # build the docker images
+make up GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_NAME # start docker containers
 ```
 
 At this point, we suppose that you have created your GCP project with a dataset named as `dw` and your credentials are exported to `GOOGLE_APPLICATION_CREDENTIALS`. So, you can login into your GCP account and start the DAG scheduling with this:
 
 ```console
-make gcloud && make start
+make gcloud # prompt gcloud auth login to log into your account
+make start # trigger the dag in airflow
 ```
 
 To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. A DAG similar to the next image should be found in the UI:
