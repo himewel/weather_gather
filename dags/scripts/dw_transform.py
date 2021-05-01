@@ -4,13 +4,14 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import yaml
+from airflow.configuration import conf
 
 
 def dw_transform(data_path="", **kwargs):
     execution_date = kwargs.get("execution_date")
     full_df = pd.read_csv(f"{data_path}/processed/{execution_date.year}.csv")
 
-    with open(f"{os.getenv('DAGS_FOLDER')}/dtypes.yaml", "r") as stream:
+    with open(f"{conf.get('core', 'dags_folder')}/dtypes.yaml", "r") as stream:
         column_types = yaml.load(stream, Loader=yaml.SafeLoader)
 
     full_df["data"] = full_df.data_medicao + "T" + full_df.hora

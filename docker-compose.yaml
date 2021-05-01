@@ -18,6 +18,7 @@ services:
         depends_on:
             - postgres
         environment:
+            - GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT
             - PYTHONPATH=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__DAGS_FOLDER=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
