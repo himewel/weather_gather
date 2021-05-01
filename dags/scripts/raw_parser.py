@@ -1,3 +1,4 @@
+import logging
 from glob import glob
 from io import StringIO
 
@@ -7,10 +8,18 @@ import numpy as np
 
 def raw_parser(data_path="", **kwargs):
     execution_date = kwargs.get("execution_date")
+
+    logging.info(f"Listing raw files from {execution_date.year}")
     file_list = glob(f"{data_path}/raw/{execution_date.year}/*.CSV")
+    logging.info(f"Files found: \n{file_list}")
+
+    if not file_list:
+        raise ValueError(f"Any CSV files were found to {execution_date.year}")
+
     full_df = pd.DataFrame()
 
     for file in file_list:
+        logging.info(f"Reading raw file {file}")
         raw_header, data_text = parse_csv(file)
         header = parse_header(raw_header)
 
@@ -20,8 +29,10 @@ def raw_parser(data_path="", **kwargs):
         for key, value in header.items():
             df[key] = value
 
+        logging.info(f"Appending to full_df")
         full_df = full_df.append(df, ignore_index=True)
 
+    logging.info("Mapping column names")
     full_df.rename(
         columns={
             "DATA (YYYY-MM-DD)": "data_medicao",
@@ -54,12 +65,13 @@ def raw_parser(data_path="", **kwargs):
         },
         inplace=True,
     )
+    logging.info(f"Data schema: \n{full_df.dtypes}")
 
     full_df.fillna(np.nan, inplace=True)
-    full_df.to_csv(
-        path_or_buf=f"{data_path}/processed/{execution_date.year}.csv",
-        index=False,
-    )
+
+    output_name = f"{data_path}/processed/{execution_date.year}.csv"
+    logging.info(f"Exporting file to {output_name}")
+    full_df.to_csv(path_or_buf=output_name, index=False)
 
 
 def parse_csv(file=""):
