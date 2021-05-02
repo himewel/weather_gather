@@ -1,32 +1,22 @@
 version: '3.7'
 services:
-    postgres:
-        image: postgres:12-alpine
-        environment:
-            POSTGRES_USER: airflow
-            POSTGRES_PASSWORD: airflow
-            POSTGRES_DB: airflow
-
     airflow:
         build:
-            context: .
+            context: airflow
             dockerfile: Dockerfile
             args:
                 - AIRFLOW_HOME=$AIRFLOW_HOME
                 - USER_ID=$USER_ID
                 - GROUP_ID=$GROUP_ID
-        depends_on:
-            - postgres
         environment:
             - GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT
             - PYTHONPATH=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__DAGS_FOLDER=$AIRFLOW_HOME/dags
-            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-            - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:///$AIRFLOW_HOME/airflow.db
             - AIRFLOW__CORE__LOAD_EXAMPLES=FALSE
             - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=TRUE
         volumes:
-            - ./dags:$AIRFLOW_HOME/dags
+            - ./airflow/dags:$AIRFLOW_HOME/dags
         ports:
             - 8080:8080
 
