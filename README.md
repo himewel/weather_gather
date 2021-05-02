@@ -15,18 +15,64 @@ So, we make data transitions between buckets like `loading_zone`, `raw`, `proces
 
 ## How to use
 
-Build up the docker container with the following command so it will get up our services, Apache Airflow (with postgres) and Metabase:
+### Terraform
 
-```console
-make build # build the docker images
-make up GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_NAME # start docker containers
+To create the resources in this project you can run the tf resources described in the `terraform` directory. To accomplish it, build the container with Terraform and gcloud installed:
+
+```shell
+# checkout to the terraform directory
+cd terraform
+
+# build the dockerfile
+make build
+
+# start the docker container with the dataset id, bucket and project names
+make start \
+    BQ_DATASET={YOUR DATASET ID} \
+    GCS_BUCKET={YOUR GCS BUCKET NAME} \
+    GOOGLE_CLOUD_PROJECT={YOUR PROJECT NAME}
+
+# login into your gcp account
+make gcloud
 ```
 
-At this point, we suppose that you have created your GCP project with a dataset named as `dw` and your credentials are exported to `GOOGLE_APPLICATION_CREDENTIALS`. So, you can login into your GCP account and start the DAG scheduling with this:
+So, you can enter in shell of the container and do the terraform steps like:
 
-```console
-make gcloud # prompt gcloud auth login to log into your account
-make start # trigger the dag in airflow
+```shell
+# to enter in the container shell
+make shell
+
+# install the project dependencies
+terraform init gcp
+# plan the resource application
+terraform plan gcp
+# create the resources as the tf files
+terraform apply gcp
+```
+
+### Apache Airflow
+
+Build up the docker container with the following command so it will get up our services, Apache Airflow (with postgres) and Metabase:
+
+```shell
+# build the docker images
+make build
+
+# start the Apache Airflow and Metabase containers
+make up \
+    BQ_DATASET={YOUR DATASET ID} \
+    GCS_BUCKET={YOUR GCS BUCKET NAME} \
+    GOOGLE_CLOUD_PROJECT={YOUR PROJECT NAME}
+```
+
+At this point, we suppose that you have created your GCP project with the resources in terraform. So, you can login into your GCP account and start the DAG scheduling with this:
+
+```shell
+# prompt gcloud auth login to log into your account
+make gcloud
+
+# trigger the dag in airflow
+make start
 ```
 
 To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. A DAG similar to the next image should be found in the UI:
