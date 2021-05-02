@@ -1,19 +1,7 @@
-variable "BUCKET_NAME" {
+variable "GCS_BUCKET" {
   type = string
 }
 
-variable "DATASET_ID" {
-  type = string
-}
-
-variable "TABLE_NAME" {
-  type = string
-}
-
-variable "CREDENTIALS_FILEPATH" {
-  type = string
-}
-
-variable "PROJECT_ID" {
+variable "BQ_DATASET" {
   type = string
 }
