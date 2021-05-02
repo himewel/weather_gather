@@ -2,13 +2,18 @@ import pandas as pd
 from google.cloud import bigquery
 
 
-def bigquery_upload(data_path="", **kwargs):
+def bigquery_upload(data_path, bq_dataset, **kwargs):
     client = bigquery.Client()
 
     file_list = ["dim_estacoes", "fact_medicoes"]
     for table in file_list:
         df = pd.read_parquet(f"{data_path}/dw/{table}.parquet")
-        load_from_dataframe(client=client, dataset_id="dw", table=table, df=df)
+        load_from_dataframe(
+            client=client,
+            dataset_id=bq_dataset,
+            table=table,
+            df=df,
+        )
 
 
 def load_from_dataframe(client, dataset_id, table, df):

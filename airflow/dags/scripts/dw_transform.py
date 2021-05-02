@@ -1,13 +1,13 @@
 import os
 from datetime import datetime
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import yaml
 from airflow.configuration import conf
 
 
-def dw_transform(data_path="", **kwargs):
+def dw_transform(data_path, **kwargs):
     execution_date = kwargs.get("execution_date")
     full_df = pd.read_csv(f"{data_path}/processed/{execution_date.year}.csv")
 
@@ -112,10 +112,3 @@ def append_medicoes(full_df, data_path):
 
     fact_medicoes = fact_medicoes.append(full_df, ignore_index=True)
     fact_medicoes.to_parquet(f"{data_path}/dw/fact_medicoes.parquet", index=False)
-
-
-if __name__ == '__main__':
-    dw_transform(
-        data_path="dags/data",
-        execution_date=datetime(year=2000, month=1, day=1),
-    )

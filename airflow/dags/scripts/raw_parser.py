@@ -2,16 +2,16 @@ import logging
 from glob import glob
 from io import StringIO
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
-def raw_parser(data_path, **kwargs):
+def raw_parser(data_path, tmp_path, **kwargs):
     execution_date = kwargs.get("execution_date")
 
     logging.info(f"Listing raw files from {execution_date.year}")
-    logging.info(f"Looking for file at {data_path}/raw/{execution_date.year}/*.CSV")
-    file_list = glob(f"{data_path}/raw/{execution_date.year}/*.CSV")
+    logging.info(f"Looking for file at {tmp_path}/raw/{execution_date.year}/*.CSV")
+    file_list = glob(f"{tmp_path}/raw/{execution_date.year}/*.CSV")
     logging.info(f"Files found: \n{file_list}")
 
     if not file_list:
@@ -112,9 +112,3 @@ def parse_header(text_header=""):
         key, value = line.split("=")
         header[key] = value
     return header
-
-
-if __name__ == '__main__':
-    from datetime import datetime
-
-    raw_parser("dags/data", execution_date=datetime(year=2000, month=1, day=1))
