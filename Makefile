@@ -5,9 +5,15 @@ USER_ID=$(shell id -u)
 GROUP_ID=$(shell id -g)
 
 export AIRFLOW_HOME
-export USER_ID
-export GROUP_ID
+export BQ_DATASET
 export GOOGLE_CLOUD_PROJECT
+export GCS_BUCKET
+export GROUP_ID
+export USER_ID
+
+.PHONY: help
+help: ##@miscellaneous Show this help message.
+	@perl ./help.pl $(MAKEFILE_LIST)
 
 .PHONY: build
 build:
