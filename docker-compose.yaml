@@ -10,6 +10,8 @@ services:
                 - GROUP_ID=$GROUP_ID
         environment:
             - GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT
+            - BQ_DATASET=$BQ_DATASET
+            - GCS_BUCKET=$GCS_BUCKET
             - PYTHONPATH=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__DAGS_FOLDER=$AIRFLOW_HOME/dags
             - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:///$AIRFLOW_HOME/airflow.db
