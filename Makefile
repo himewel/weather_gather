@@ -12,29 +12,29 @@ export GROUP_ID
 export USER_ID
 
 .PHONY: help
-help: ##@miscellaneous Show this help message.
+help: ##@miscellaneous Show this help message
 	@perl ./help.pl $(MAKEFILE_LIST)
 
 .PHONY: build
-build:
+build: ##@docker Build docker images
 	docker-compose build
 
 .PHONY: up
-up:
+up: ##@docker Start docker-compose containers
 	docker-compose up --detach
 
 .PHONY: start
-start:
+start: ##@docker Trigger Apache Airflow dag
 	docker-compose exec \
 		airflow \
 		airflow unpause weather_data_pipeline
 
 .PHONY: gcloud
-gcloud:
+gcloud: ##@docker Calls gcloud auth login
 	docker-compose exec \
 		airflow \
 		gcloud auth login --no-launch-browser --update-adc
 
 .PHONY: stop
-stop:
+stop: ##docker Stop the containers
 	docker-compose stop
