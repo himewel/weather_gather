@@ -1,9 +1,11 @@
 # INMET Weather Stations Data Gather
 
-<code><img src="./img/docker.png"> Docker</code> +
-<code><img src="./img/airflow.png"> Airflow</code> +
-<code><img src="./img/bigquery.png"> BigQuery</code> +
-<code><img src="./img/metabase.png"> Metabase</code>
+<p>
+<img alt="Docker" src="https://img.shields.io/badge/docker-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white"/>
+<img alt="Apache Airflow" src="https://img.shields.io/badge/apacheairflow-%23017cee.svg?&style=for-the-badge&logo=apache-airflow&logoColor=white"/>
+<img alt="Google Cloud" src="https://img.shields.io/badge/GoogleCloud-%234285F4.svg?&style=for-the-badge&logo=google-cloud&logoColor=white"/>
+<img alt="Metabase" src="https://img.shields.io/badge/Metabase-%23509EE3.svg?&style=for-the-badge&logo=metabase&logoColor=white"/>
+</p>
 
 Hi, there! Here we are going to extract data from Brazil weather stations with [INMET](https://portal.inmet.gov.br/dadoshistoricos) open data files. After extraction, we structure the data (of an awful csv format) with Apache Airflow task orchestration with PythonOperator and BashOperator, then the data is uploaded to BigQuery. So, with the structured data in GCS and BigQuery, we use Metabase to create some charts. The following diagram expands this flow.
 
