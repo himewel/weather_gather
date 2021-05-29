@@ -79,7 +79,9 @@ make start
 
 To follow the dag run, check the Apache Airflow Webserver UI in http://localhost:8000. A DAG similar to the next image should be found in the UI:
 
-![](img/pipeline.png)
+<p align="center">
+<img alt="Airflow DAG" src="./img/pipeline.png"/>
+</p>
 
 To build the charts below, enter in the Metabase UI at http://localhost:3000, set the service account access and create the charts with the SQL files stored in `./sql`.
 
