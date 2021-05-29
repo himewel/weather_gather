@@ -88,7 +88,7 @@ To follow the dag run, check the Apache Airflow Webserver UI in http://localhost
 
 ### Apache Superset
 
-To build the charts below, enter in the Apache Superset UI at http://localhost:8088, login into your google account and import the dashboard located into `./superset/dashboards`.
+To build the charts below, enter in the Apache Superset UI at http://localhost:8088, login into your google account and import the dashboard located into `./superset/dashboards`. To plot the map charts, you need to provide an API key from [Mapbox](https://mapbox.com/)
 
 ```shell
 # checkout to the superset directory
