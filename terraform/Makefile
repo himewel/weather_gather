@@ -5,7 +5,7 @@ CONTAINER_NAME=weather_gather_terraform_1
 
 .PHONY: help
 help: ##@miscellaneous Show this help message
-	@perl ../help.pl $(MAKEFILE_LIST)
+	@perl ./help.pl $(MAKEFILE_LIST)
 
 .PHONY: build
 build: ##@docker Build the docker container
