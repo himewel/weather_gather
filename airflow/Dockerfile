@@ -1,4 +1,4 @@
-FROM apache/airflow:2.0.1
+FROM apache/airflow:2.1.0
 
 ARG USER_ID
 ARG GROUP_ID

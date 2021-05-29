@@ -2,7 +2,7 @@ version: '3.7'
 services:
     airflow:
         build:
-            context: airflow
+            context: .
             dockerfile: Dockerfile
             args:
                 - AIRFLOW_HOME=$AIRFLOW_HOME
@@ -18,11 +18,6 @@ services:
             - AIRFLOW__CORE__LOAD_EXAMPLES=FALSE
             - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=TRUE
         volumes:
-            - ./airflow/dags:$AIRFLOW_HOME/dags
+            - ./dags:$AIRFLOW_HOME/dags
         ports:
             - 8080:8080
-
-    metabase:
-        image: metabase/metabase:v0.37.2
-        ports:
-            - 3000:3000

@@ -25,4 +25,5 @@ airflow users create \
     --email name@domain.org
 
 echo "Starting services..."
-airflow scheduler -D & airflow webserver -p 8080
+airflow scheduler --daemon \
+    & airflow webserver --port 8080
