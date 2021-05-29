@@ -85,11 +85,7 @@ To follow the dag run, check the Apache Airflow Webserver UI in http://localhost
 
 To build the charts below, enter in the Metabase UI at http://localhost:3000, set the service account access and create the charts with the SQL files stored in `./sql`.
 
-![](img/map_chart.png)
-
-![](img/line_chart.png)
-
-![](img/dashboard.png)
+![](img/dashboard.jpg)
 
 ## References
 
